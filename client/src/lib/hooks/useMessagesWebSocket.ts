@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import useMessagesStore from "~/lib/stores/messages";
-import {getApiPath} from "~/getApiPath";
+import {getApiPath, getApiPathWebSocket} from "~/getApiPath";
 
 type Message = {
     name: string;
@@ -11,7 +11,8 @@ const useMessagesWebSocket = () => {
     const ws = useRef<WebSocket | null>(null);
     const {addMessage} = useMessagesStore();
     useEffect(() => {
-        const socket = new WebSocket(getApiPath('/messages/ws'));
+        console.log(`ws: ${getApiPathWebSocket('/messages/ws')}`);
+        const socket = new WebSocket(getApiPathWebSocket('/messages/ws'));
 
         socket.onopen = () => {
             console.log('Connected to WebSocket');
