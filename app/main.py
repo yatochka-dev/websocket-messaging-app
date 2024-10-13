@@ -16,10 +16,16 @@ app.add_middleware(
 database: List[Tuple[str, str]] = [
 ]
 
+
 # Model for the message
 class Message(BaseModel):
     name: str
     message: str
+
+
+class SocketResponse(BaseModel):
+    type: str
+    new_message: Message | None
 
 
 # To keep track of connected WebSocket clients
@@ -51,7 +57,7 @@ def get_all_messages() -> List[Tuple[str, str]]:
 async def add_message(name: str, message: str):
     database.append((name, message))
     # Notify all connected clients of the new message
-    await manager.send_message({"name": name, "message": message})
+    await manager.send_message(SocketResponse(type="new_message", new_message=Message(name=name, message=message)).dict())
 
 
 # Basic GET route
@@ -73,6 +79,13 @@ async def get_messages():
     return {"messages": [{"name": name, "message": msg} for name, msg in get_all_messages()]}
 
 
+@app.post("/clear-messages")
+async def clear_messages():
+    database.clear()
+    await manager.send_message(SocketResponse(type="clear_messages", new_message=None).dict())
+    return {"message": "Messages cleared successfully"}
+
+
 # WebSocket endpoint to handle real-time communication (using JSON)
 @app.websocket("/messages/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -83,6 +96,6 @@ async def websocket_endpoint(websocket: WebSocket):
             if data.get("action") == "close":
                 break
             # Echo back the received JSON message
-            await websocket.send_json({"message": "Message received", "data": data})
+            # await websocket.send_json({"message": "Message received", "data": data})
     except WebSocketDisconnect:
         manager.disconnect(websocket)
