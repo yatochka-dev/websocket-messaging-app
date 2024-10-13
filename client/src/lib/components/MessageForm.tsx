@@ -27,7 +27,7 @@ export function MessageForm() {
       }
     >
       <div className="grid w-full items-center gap-1.5">
-        <Label htmlFor="username">Email</Label>
+        <Label htmlFor="username">Username</Label>
         <Input
           type="text"
           id="username"
@@ -38,7 +38,7 @@ export function MessageForm() {
       </div>
 
       <div className={"grid w-full items-center gap-1.5"}>
-        <Label htmlFor="message">Username</Label>
+        <Label htmlFor="message">Your Message</Label>
         <Textarea
           id="message"
           className={"w-full"}
