@@ -1,0 +1,1 @@
+export const getApiPath = (path: string) => `${process.env.NEXT_PUBLIC_API_URL}${path.startsWith("/") ? path.slice(1) : path}`;

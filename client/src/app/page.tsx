@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import useWebSocket from '~/lib/hooks/useWebSocket';
+import useMessagesWebSocket from '~/lib/hooks/useMessagesWebSocket';
 import MessageList from '~/lib/components/MessageList';
 import useMessagesStore from "~/lib/stores/messages";
 import {MessageForm} from "~/lib/components/MessageForm";
@@ -14,7 +14,7 @@ const MessagingApp = () => {
 
   // Update the unified message state when a message is received via WebSocket
 
-  useWebSocket('ws://localhost:8000/messages/ws'); // Pass WebSocket messages to update state
+  useMessagesWebSocket(); // Pass WebSocket messages to update state
 
 
   return (

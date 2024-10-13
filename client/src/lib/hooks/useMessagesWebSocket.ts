@@ -1,16 +1,17 @@
 import { useEffect, useRef } from 'react';
 import useMessagesStore from "~/lib/stores/messages";
+import {getApiPath} from "~/getApiPath";
 
 type Message = {
     name: string;
     message: string;
 };
 
-const useWebSocket = (url: string) => {
+const useMessagesWebSocket = () => {
     const ws = useRef<WebSocket | null>(null);
     const {addMessage} = useMessagesStore();
     useEffect(() => {
-        const socket = new WebSocket(url);
+        const socket = new WebSocket(getApiPath('/messages/ws'));
 
         socket.onopen = () => {
             console.log('Connected to WebSocket');
@@ -30,9 +31,9 @@ const useWebSocket = (url: string) => {
         return () => {
             socket.close();
         };
-    }, [addMessage, url]);
+    }, [addMessage]);
 
     return ws;
 };
 
-export default useWebSocket;
+export default useMessagesWebSocket;
